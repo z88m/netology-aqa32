@@ -1,6 +1,7 @@
 package ru.netology.test;
 
 import lombok.val;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.netology.pages.DashboardPage;
@@ -18,6 +19,7 @@ public class LoginTest {
 
     private String testSite = "http://localhost:9999";
     private String testUser = "vasya";
+    private String secondTestUser = "petya";
     private String testUserPass = "qwerty123";
     private String dbUrl = "jdbc:mysql://localhost:3306/app";
     private String dbUser = "app";
@@ -25,7 +27,7 @@ public class LoginTest {
 
     @Test
     @DisplayName("Логин с валидными данными")
-    void loginWithValideData() throws SQLException {
+    void loginWithValidData() throws SQLException {
         open(testSite);
         val loginPage = new LoginPage();
         val authInfo = new DataHelper.AuthInfo(testUser, testUserPass);
@@ -34,13 +36,17 @@ public class LoginTest {
         DashboardPage dashboardPage = verificationPage.validVerify(verificationCode);
     }
 
+    @AfterAll
     @DisplayName("Удаляем данные тестовых пользователей")
-    void deleteTestUsers() throws SQLException {
+    void afterAll () throws SQLException {
+        deleteTestUsers();
+    }
 
+    private void deleteTestUsers() throws SQLException {
         val deleteVasyaCards = "DELETE FROM app.cards\n" +
                 "WHERE user_id=(SELECT id FROM app.users WHERE login='" + testUser + "');";
         val deleteVasya = "DELETE FROM app.users WHERE login='" + testUser + "';";
-        val deletePetya = "DELETE FROM app.users WHERE login='petya';";
+        val deletePetya = "DELETE FROM app.users WHERE login='" + secondTestUser + "';";
         val deleteVasyaCodes = "DELETE FROM app.auth_codes\n" +
                 "WHERE user_id = (SELECT id FROM app.users WHERE login='" + testUser + "');";
         Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
@@ -50,6 +56,5 @@ public class LoginTest {
         statement.executeUpdate(deleteVasya);
         statement.executeUpdate(deletePetya);
         conn.close();
-
     }
 }

@@ -16,10 +16,6 @@ public class DataHelper {
         private String password;
     }
 
-    public static AuthInfo setAuthInfo(String testUser, String testUserPass) {
-        return new AuthInfo(testUser, testUserPass);
-    }
-
     @Value
     public static class VerificationCode {
         private String code;

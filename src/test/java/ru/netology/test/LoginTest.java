@@ -19,9 +19,8 @@ public class LoginTest {
 
     private String testSite = "http://localhost:9999";
     private String testUser = "vasya";
-    private String secondTestUser = "petya";
     private String testUserPass = "qwerty123";
-    private String dbUrl = "jdbc:mysql://localhost:3306/app";
+    private String dbUrl = "jdbc:mysql://127.0.0.1:3306/app";
     private String dbUser = "app";
     private String dbPass = "pass";
 
@@ -36,13 +35,15 @@ public class LoginTest {
         DashboardPage dashboardPage = verificationPage.validVerify(verificationCode);
     }
 
-    @AfterAll
-    @DisplayName("Удаляем данные тестовых пользователей")
-    void afterAll () throws SQLException {
-        deleteTestUsers();
-    }
+   @AfterAll
+   @DisplayName("Удаление тестовых пользователей")
+   static void deleteTestUsers() throws SQLException {
+        val testUser = "vasya";
+        val secondTestUser = "petya";
+        val dbUrl = "jdbc:mysql://127.0.0.1:3306/app";
+        val dbUser = "root";
+        val dbPass = "root";
 
-    private void deleteTestUsers() throws SQLException {
         val deleteVasyaCards = "DELETE FROM app.cards\n" +
                 "WHERE user_id=(SELECT id FROM app.users WHERE login='" + testUser + "');";
         val deleteVasya = "DELETE FROM app.users WHERE login='" + testUser + "';";

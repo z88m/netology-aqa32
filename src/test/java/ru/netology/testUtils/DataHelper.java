@@ -3,8 +3,10 @@ package ru.netology.testUtils;
 import lombok.Value;
 import lombok.val;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DataHelper {
     private DataHelper() {
